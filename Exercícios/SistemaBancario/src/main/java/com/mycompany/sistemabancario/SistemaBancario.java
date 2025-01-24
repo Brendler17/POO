@@ -29,7 +29,7 @@ public class SistemaBancario {
                     break;
                 }
                 case 4 -> {
-                    System.out.println("Encontrar Conta.\n");
+                    searchAccount();
                     break;
                 }
                 case 0 -> {
@@ -141,5 +141,22 @@ public class SistemaBancario {
             }
         }
         System.out.println("\n");
+    }
+    
+    public static void searchAccount(){
+        System.out.println("Digite o número de conta a ser buscada:");
+        int searchedAccountNumber = scanner.nextInt();
+        scanner.nextLine();
+        
+        ContaBanco searchedAccount = accounts.stream().
+                filter(account -> account.getNumberAccount() == searchedAccountNumber).
+                findFirst().
+                orElse(null);
+        
+        if(searchedAccount != null){
+            searchedAccount.showAccount();
+        } else{
+            System.out.println("\nConta não encontrada\n");
+        }
     }
 }
