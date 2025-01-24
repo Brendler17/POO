@@ -25,7 +25,7 @@ public class SistemaBancario {
                     break;
                 }
                 case 3 -> {
-                    System.out.println("Listar Contas.\n");
+                    listAccounts();
                     break;
                 }
                 case 4 -> {
@@ -129,5 +129,17 @@ public class SistemaBancario {
         } else {
             System.out.println("\nConta não encontrada!\n");
         }
+    }
+    
+    public static void listAccounts(){
+        if(accounts.isEmpty()){
+            System.out.println("\nNenhuma conta cadastrada!\n");
+        } else{
+            System.out.println("\nContas Cadastradas\n");
+            for(ContaBanco account : accounts){
+                account.showAccount();
+            }
+        }
+        System.out.println("\n");
     }
 }
