@@ -21,7 +21,7 @@ public class SistemaBancario {
                     break;
                 }
                 case 2 -> {
-                    System.out.println("Remover Conta.\n");
+                    removeAccount();
                     break;
                 }
                 case 3 -> {
@@ -111,5 +111,23 @@ public class SistemaBancario {
 
         accounts.add(newAccount);
         System.out.println("Conta Adicionada com Sucesso!\n");
+    }
+
+    public static void removeAccount() {
+        System.out.println("Digite o número da conta a ser removida: ");
+        int removedAccountNumber = scanner.nextInt();
+        scanner.nextLine();
+
+        ContaBanco removedAccount = accounts.stream().
+                filter(account -> account.getNumberAccount() == removedAccountNumber).
+                findFirst().
+                orElse(null);
+
+        if (removedAccount != null) {
+            accounts.remove(removedAccount);
+            System.out.println("\nConta removida com sucesso!\n");
+        } else {
+            System.out.println("\nConta não encontrada!\n");
+        }
     }
 }
