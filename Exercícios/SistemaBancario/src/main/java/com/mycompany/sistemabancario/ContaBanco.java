@@ -9,6 +9,13 @@ public class ContaBanco {
     private static int numberAccounts;
 
     public ContaBanco(String name, double balance) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("\nO nome não pode ser em branco!\n");
+        }
+        if (balance < 0) {
+            throw new IllegalArgumentException("\nO saldo não pode ser negativo!\n");
+        }
+
         this.name = name;
         this.balance = balance;
         numberAccounts++;
@@ -17,16 +24,26 @@ public class ContaBanco {
 
     public ContaBanco(String name, double balance, double limit) {
         this(name, balance);
+        if (limit < 0) {
+            throw new IllegalArgumentException("\nO limite não pode ser negativo!\n");
+        }
         this.limit = limit;
     }
 
     public void deposit(double value) {
+        if (value <= 0) {
+            throw new IllegalArgumentException("\nO valor do depósito deve ser positivo!\n");
+        }
+
         this.balance = this.balance + value;
     }
 
-    public boolean withdraw(double valor) {
-        if (balance + limit > valor) {
-            this.balance = this.balance - valor;
+    public boolean withdraw(double value) {
+        if (value <= 0) {
+            throw new IllegalArgumentException("\nO valor do saque deve ser positivo!\n");
+        }
+        if (balance + limit >= value) {
+            this.balance = this.balance - value;
             return true;
         }
 
@@ -43,6 +60,37 @@ public class ContaBanco {
 
     public void showAccount() {
         System.out.println(this.toString());
+    }
+
+    public int getNumberAccount() {
+        return this.number;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("\nO nome não pode ser em branco!\n");
+        }
+
+        this.name = name;
+    }
+
+    public double getBalance() {
+        return this.balance;
+    }
+
+    public double getLimit() {
+        return this.limit;
+    }
+
+    public void setLimit(double limit) {
+        if (limit < 0) {
+            throw new IllegalArgumentException("\nO limite não pode ser negativo!\n");
+        }
+        this.limit = limit;
     }
 
     @Override
