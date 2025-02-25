@@ -131,16 +131,43 @@ public class GridMap {
 
             buttonsMatrix[heroX][heroY].setIcon(null);
             buttonsMatrix[heroX][heroY].setEnabled(false);
-            buttonsMatrix[newX][newY].putClientProperty("type", null);
+            buttonsMatrix[heroX][heroY].putClientProperty("type", null);
 
             heroPosition[0] = newX;
             heroPosition[1] = newY;
 
             buttonsMatrix[newX][newY].setIcon(CreateIcon("hero.png"));
-            buttonsMatrix[newX][newY].putClientProperty("type", "hero");
             buttonsMatrix[newX][newY].setEnabled(true);
-
+            buttonsMatrix[newX][newY].putClientProperty("type", "hero");
         }
+    }
+
+    private static void AddKeyMovement(JFrame frame, JButton[][] buttonsMatrix, int[] heroPosition) {
+        frame.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                int keyCode = e.getKeyCode();
+
+                switch (keyCode) {
+                    case KeyEvent.VK_W:
+                        MoveHero(buttonsMatrix, heroPosition, -1, 0);
+                        break;
+                    case KeyEvent.VK_A:
+                        MoveHero(buttonsMatrix, heroPosition, 0, -1);
+                        break;
+                    case KeyEvent.VK_S:
+                        MoveHero(buttonsMatrix, heroPosition, 1, 0);
+                        break;
+                    case KeyEvent.VK_D:
+                        MoveHero(buttonsMatrix, heroPosition, 0, 1);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
+        frame.setFocusable(true);
     }
 
     public static void main(String[] args) {
@@ -157,6 +184,7 @@ public class GridMap {
 
         AddEnemys(buttonsMatrix);
         AddWall(buttonsMatrix);
+        AddKeyMovement(frame, buttonsMatrix, heroPosition);
 
         frame.setVisible(true);
     }
