@@ -44,6 +44,7 @@ public class GridMap {
                 if (i == heroPosition[0] && j == heroPosition[1]) {
                     buttonsMatrix[i][j].setIcon(CreateIcon("hero.png"));
                     buttonsMatrix[i][j].setEnabled(true);
+                    buttonsMatrix[i][j].putClientProperty("type", "hero");
                 }
 
                 gridPanel.add(buttonsMatrix[i][j]);
@@ -63,6 +64,7 @@ public class GridMap {
 
             if (!buttonsMatrix[deltaX][deltaY].isEnabled()) {
                 buttonsMatrix[deltaX][deltaY].setIcon(CreateIcon("wall.png"));
+                buttonsMatrix[deltaX][deltaY].putClientProperty("type", "wall");
                 buttonsMatrix[deltaX][deltaY].setEnabled(true);
                 counter++;
             }
@@ -79,6 +81,7 @@ public class GridMap {
 
             if (!buttonsMatrix[deltaX][deltaY].isEnabled()) {
                 buttonsMatrix[deltaX][deltaY].setIcon(CreateIcon("enemy" + (counter + 1) + ".png"));
+                buttonsMatrix[deltaX][deltaY].putClientProperty("type", "enemy");
                 buttonsMatrix[deltaX][deltaY].setEnabled(true);
                 counter++;
             }
@@ -117,18 +120,26 @@ public class GridMap {
         int newY = heroY + deltaY;
 
         if (newX >= 0 && newX < 5 && newY >= 0 && newY < 5) {
-            if (buttonsMatrix[newX][newY].isEnabled()) {
-                JOptionPane.showMessageDialog(null, "Combat!");
-            } else {
-                buttonsMatrix[heroX][heroY].setIcon(null);
-                buttonsMatrix[heroX][heroY].setEnabled(false);
+            String type = (String) buttonsMatrix[newX][newY].getClientProperty("type");
 
-                heroPosition[0] = newX;
-                heroPosition[1] = newY;
-
-                buttonsMatrix[newX][newY].setIcon(CreateIcon("hero.png"));
-                buttonsMatrix[newX][newY].setEnabled(true);
+            if ("wall".equals(type)) {
+                return;
+            } else if ("enemy".equals(type)) {
+                JOptionPane.showMessageDialog(null, "Combat!", "Alerta", JOptionPane.WARNING_MESSAGE);
+                return;
             }
+
+            buttonsMatrix[heroX][heroY].setIcon(null);
+            buttonsMatrix[heroX][heroY].setEnabled(false);
+            buttonsMatrix[newX][newY].putClientProperty("type", null);
+
+            heroPosition[0] = newX;
+            heroPosition[1] = newY;
+
+            buttonsMatrix[newX][newY].setIcon(CreateIcon("hero.png"));
+            buttonsMatrix[newX][newY].putClientProperty("type", "hero");
+            buttonsMatrix[newX][newY].setEnabled(true);
+
         }
     }
 
