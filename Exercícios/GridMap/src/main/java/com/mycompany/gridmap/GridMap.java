@@ -3,6 +3,7 @@ package com.mycompany.gridmap;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.*;
 import java.util.Random;
 import javax.swing.*;
 
@@ -93,14 +94,18 @@ public class GridMap {
         int newY = heroY + deltaY;
 
         if (newX >= 0 && newX < 5 && newY >= 0 && newY < 5) {
-            buttonsMatrix[heroX][heroY].setIcon(null);
-            buttonsMatrix[heroX][heroY].setEnabled(false);
+            if (buttonsMatrix[newX][newY].isEnabled()) {
+                JOptionPane.showMessageDialog(null, "Combat!");
+            } else {
+                buttonsMatrix[heroX][heroY].setIcon(null);
+                buttonsMatrix[heroX][heroY].setEnabled(false);
 
-            heroPosition[0] = newX;
-            heroPosition[1] = newY;
+                heroPosition[0] = newX;
+                heroPosition[1] = newY;
 
-            buttonsMatrix[newX][newY].setIcon(CreateIcon("hero.png"));
-            buttonsMatrix[newX][newY].setEnabled(true);
+                buttonsMatrix[newX][newY].setIcon(CreateIcon("hero.png"));
+                buttonsMatrix[newX][newY].setEnabled(true);
+            }
         }
     }
 
