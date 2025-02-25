@@ -1,0 +1,5 @@
+Nome,Idade,Email
+Alice,25,alice@email.com
+Bob,30,bob@email.com
+Carlos,22,carlos@email.com
+
