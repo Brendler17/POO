@@ -20,8 +20,15 @@ public class GridMap {
     }
 
     private static ImageIcon CreateIcon(String filename) {
+        int width = 70, height = 70;
+
+        if (filename.equals("wall.png")) {
+            width = 130;
+            height = 130;
+        }
+
         ImageIcon icon = new ImageIcon(filename);
-        Image scaledImage = icon.getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH);
+        Image scaledImage = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
 
         return new ImageIcon(scaledImage);
     }
@@ -44,6 +51,22 @@ public class GridMap {
         }
 
         return gridPanel;
+    }
+
+    private static void AddWall(JButton[][] buttonsMatrix) {
+        Random random = new Random();
+        int counter = 0;
+
+        while (counter < 5) {
+            int deltaX = random.nextInt(5);
+            int deltaY = random.nextInt(5);
+
+            if (!buttonsMatrix[deltaX][deltaY].isEnabled()) {
+                buttonsMatrix[deltaX][deltaY].setIcon(CreateIcon("wall.png"));
+                buttonsMatrix[deltaX][deltaY].setEnabled(true);
+                counter++;
+            }
+        }
     }
 
     private static void AddEnemys(JButton[][] buttonsMatrix) {
@@ -122,6 +145,7 @@ public class GridMap {
         frame.add(movementPanel, BorderLayout.SOUTH);
 
         AddEnemys(buttonsMatrix);
+        AddWall(buttonsMatrix);
 
         frame.setVisible(true);
     }
