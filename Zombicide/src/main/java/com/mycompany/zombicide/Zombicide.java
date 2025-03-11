@@ -4,5 +4,6 @@ public class Zombicide {
 
     public static void main(String[] args) {
         char[][] map = MapManager.loadRandomMap();
+        new WelcomeScreen();
     }
 }
