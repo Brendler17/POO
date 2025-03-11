@@ -51,6 +51,6 @@ public class WelcomeScreen {
     private void startGame(boolean debug) {
         debugMode = debug;
         frame.dispose();
-        // new GameUI
+        new GameUI();
     }
 }
