@@ -6,7 +6,7 @@ import java.util.*;
 public class MapManager {
 
     private static final String MAPS_FOLDER = "/maps/";
-    private static final String[] MAPS_FILES = {"map_1.txt", "map_2.txt", "map_3.txt", "map_4.txt", "map_5.txt"};
+    private static final String[] MAPS_FILES = {"map_1.txt", "map_2.txt", "map_3.txt", "map_4.txt"};
 
     public static char[][] loadRandomMap() {
         Random random = new Random();
