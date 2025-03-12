@@ -6,6 +6,6 @@ public class ZombieCreeping extends Zombie {
         super(1, positionX, positionY);
     }
 
-    public void Move(int[] position) {
+    public void Move(int newX, int newY) {
     }
 }
