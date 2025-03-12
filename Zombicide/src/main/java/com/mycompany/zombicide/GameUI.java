@@ -7,12 +7,14 @@ import javax.swing.*;
 public class GameUI {
 
     private static final int SIZE = 10;
+    private GameManager gameManager;
     private JFrame frame;
     private JButton[][] buttons;
     private char[][] mapData;
 
     public GameUI(int playerPerception, boolean debugMode) {
-        this.mapData = MapManager.loadRandomMap();
+        gameManager = new GameManager(playerPerception);
+        this.mapData = gameManager.getMapData();
 
         frame = new JFrame("Zumbicídio");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
