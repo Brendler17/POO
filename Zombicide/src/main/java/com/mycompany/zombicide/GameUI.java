@@ -1,6 +1,7 @@
 package com.mycompany.zombicide;
 
 import java.awt.*;
+import java.net.URL;
 import javax.swing.*;
 
 public class GameUI {
@@ -10,7 +11,7 @@ public class GameUI {
     private JButton[][] buttons;
     private char[][] mapData;
 
-    public GameUI() {
+    public GameUI(int playerPerception, boolean debugMode) {
         this.mapData = MapManager.loadRandomMap();
 
         frame = new JFrame("Zumbicídio");
@@ -26,7 +27,9 @@ public class GameUI {
             for (int j = 0; j < SIZE; j++) {
                 buttons[i][j] = new JButton();
                 buttons[i][j].setFont(new Font("Arial", Font.BOLD, 14));
-                addIcon(i, j);
+                AddIcon(i, j);
+                buttons[i][j].setDisabledIcon(buttons[i][j].getIcon());
+                buttons[i][j].setEnabled(false);
                 frame.add(buttons[i][j]);
             }
         }
@@ -34,34 +37,54 @@ public class GameUI {
         frame.setVisible(true);
     }
 
-    private void addIcon(int i, int j) {
+    private void AddIcon(int i, int j) {
         char symbol = mapData[i][j];
 
         switch (symbol) {
             case 'P': // Jogador
-                buttons[i][j].setBackground(Color.GREEN);
+                buttons[i][j].setIcon(CreateIcon("heroWithNoGuns.png"));
                 break;
             case 'R': // Zumbi Rastejante
-                buttons[i][j].setBackground(Color.GRAY);
+                buttons[i][j].setIcon(CreateIcon("creeping.png"));
                 break;
-            case 'C': // Zumbi Comum
-                buttons[i][j].setBackground(Color.DARK_GRAY);
+            case 'Z': // Zumbi Comum
+                buttons[i][j].setIcon(CreateIcon("zombie.png"));
                 break;
-            case 'X': // Zumbi Corredor
-                buttons[i][j].setBackground(Color.ORANGE);
+            case 'C': // Zumbi Corredor
+                buttons[i][j].setIcon(CreateIcon("runner.png"));
                 break;
             case 'G': // Zumbi Gigante
-                buttons[i][j].setBackground(Color.RED);
+                buttons[i][j].setIcon(CreateIcon("giant.png"));
                 break;
             case 'B': // Baú
-                buttons[i][j].setBackground(Color.YELLOW);
+                buttons[i][j].setIcon(CreateIcon("trunk.png"));
                 break;
             case '#': // Parede
-                buttons[i][j].setBackground(Color.BLACK);
+                buttons[i][j].setIcon(CreateIcon("wall.png"));
                 break;
             default: // Espaço vazio
                 buttons[i][j].setBackground(Color.WHITE);
                 break;
         }
+    }
+
+    private ImageIcon CreateIcon(String filename) {
+        int width = 50, height = 50;
+
+        if (filename.equals("wall.png")) {
+            width = 80;
+            height = 80;
+        }
+
+        URL iconUrl = getClass().getClassLoader().getResource("icons/" + filename);
+
+        if (iconUrl == null) {
+            System.err.println("Erro: Ícone não encontrado - " + filename);
+        }
+
+        ImageIcon icon = new ImageIcon(iconUrl);
+        Image scaledImage = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+
+        return new ImageIcon(scaledImage);
     }
 }
