@@ -7,10 +7,12 @@ public abstract class Zombie {
 
     public Zombie(int health, int positionX, int positionY) {
         this.health = health;
-        position = new int[2];
-        position[0] = positionX;
-        position[1] = positionY;
+        this.position = new int[]{positionX, positionY};
     }
 
-    public abstract void Move(int[] position);
+    public int[] getPosition() {
+        return position;
+    }
+
+    public abstract void Move(int newX, int newY);
 }
