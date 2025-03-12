@@ -7,8 +7,13 @@ public class Hero {
     private int[] position;
 
     public Hero(int positionX, int positionY, int playerPerception) {
-        health = 5;
-        perception = playerPerception;
+        this.health = 5;
+        this.perception = playerPerception;
+        this.position = new int[]{positionX, positionY};
+    }
+
+    public int[] getPosition() {
+        return position;
     }
 
     public void Move(int newX, int newY) {
