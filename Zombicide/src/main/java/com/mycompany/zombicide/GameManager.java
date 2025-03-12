@@ -1,23 +1,28 @@
 package com.mycompany.zombicide;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameManager {
 
     private char[][] mapData;
     private Hero player;
     private List<Zombie> zombies;
+    private Map<int[], Zombie> zombieMap;
     private List<Chest> chests;
 
     public GameManager(int playerPerception) {
         this.mapData = MapManager.loadRandomMap();
         this.zombies = new ArrayList<>();
+        this.zombieMap = new HashMap<>();
         this.chests = new ArrayList<>();
         iniatilizeEntities(playerPerception);
     }
 
     private void iniatilizeEntities(int playerPerception) {
+        Zombie newZombie;
         for (int i = 0; i < mapData.length; i++) {
             for (int j = 0; j < mapData[i].length; j++) {
                 switch (mapData[i][j]) {
@@ -25,16 +30,24 @@ public class GameManager {
                         player = new Hero(i, j, playerPerception);
                         break;
                     case 'R':
-                        zombies.add(new ZombieCreeping(i, j));
+                        newZombie = new ZombieCreeping(i, j);
+                        zombies.add(newZombie);
+                        zombieMap.put(new int[]{i, j}, newZombie);
                         break;
                     case 'Z':
-                        zombies.add(new ZombieCommon(i, j));
+                        newZombie = new ZombieCommon(i, j);
+                        zombies.add(newZombie);
+                        zombieMap.put(new int[]{i, j}, newZombie);
                         break;
                     case 'C':
-                        zombies.add(new ZombieRunner(i, j));
+                        newZombie = new ZombieRunner(i, j);
+                        zombies.add(newZombie);
+                        zombieMap.put(new int[]{i, j}, newZombie);
                         break;
                     case 'G':
-                        zombies.add(new ZombieGiant(i, j));
+                        newZombie = new ZombieGiant(i, j);
+                        zombies.add(newZombie);
+                        zombieMap.put(new int[]{i, j}, newZombie);
                         break;
                     case 'B':
                         chests.add(new Chest(i, j));
@@ -42,6 +55,17 @@ public class GameManager {
                 }
             }
         }
+    }
+
+    public boolean isValidMove(int newX, int newY) {
+        if (newX < 0 || newX >= mapData.length || newY < 0 || newY >= mapData.length) {
+            return false;
+        }
+        if (mapData[newX][newY] == '#') {
+            return false;
+        }
+
+        return true;
     }
 
     public Hero getPlayer() {
