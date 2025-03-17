@@ -14,22 +14,12 @@ public class Hero {
         this.currentWeapon = "hands";
     }
 
-    public void Move(int newX, int newY) {
-    }
-
-    public void Combat(Zombie zombie) {
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public int getPerception() {
-        return perception;
-    }
-
     public int[] getPosition() {
         return position;
+    }
+
+    public void setPosition(int newX, int newY) {
+        position = new int[]{newX, newY};
     }
 
     public String getCurrentWeapon() {
