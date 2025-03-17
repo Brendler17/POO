@@ -1,6 +1,7 @@
 package com.mycompany.zombicide;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.net.URL;
 import javax.swing.*;
 
@@ -44,18 +45,56 @@ public class GameUI {
         }
 
         frame.setVisible(true);
+        createMovementButtons();
     }
 
     public void updateUI() {
         mapData = gameManager.getMapData();
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
+                buttons[i][j].setIcon(null);
+                buttons[i][j].setBackground(Color.WHITE);
                 addIcon(i, j);
+                buttons[i][j].setDisabledIcon(buttons[i][j].getIcon());
             }
         }
 
         frame.revalidate();
         frame.repaint();
+    }
+
+    public void createMovementButtons() {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                buttons[i][j].setEnabled(false);
+                for (ActionListener action : buttons[i][j].getActionListeners()) {
+                    buttons[i][j].removeActionListener(action);
+                }
+            }
+        }
+
+        int[] playerPosition = gameManager.getPlayer().getPosition();
+        int x = playerPosition[0];
+        int y = playerPosition[1];
+
+        int[][] validMovements = {
+            {x - 1, y},
+            {x + 1, y},
+            {x, y - 1},
+            {x, y + 1}
+        };
+
+        for (int[] move : validMovements) {
+            int newX = move[0];
+            int newY = move[1];
+
+            if (gameManager.isValidMove(newX, newY)) {
+                buttons[newX][newY].setEnabled(true);
+                buttons[newX][newY].setDisabledIcon(buttons[newX][newY].getIcon());
+                buttons[newX][newY].addActionListener(e -> gameManager.movePlayer(newX, newY));
+                buttons[newX][newY].setBackground(Color.LIGHT_GRAY);
+            }
+        }
     }
 
     private void addIcon(int i, int j) {

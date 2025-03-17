@@ -76,6 +76,7 @@ public class GameManager {
             player.setPosition(newX, newY);
             mapData[newX][newY] = 'P';
             gameUI.updateUI();
+            gameUI.createMovementButtons();
         }
     }
 
