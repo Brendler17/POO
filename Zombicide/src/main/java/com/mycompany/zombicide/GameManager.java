@@ -12,12 +12,14 @@ public class GameManager {
     private List<Zombie> zombies;
     private Map<int[], Zombie> zombieMap;
     private List<Chest> chests;
+    private GameUI gameUI;
 
-    public GameManager(int playerPerception) {
+    public GameManager(int playerPerception, GameUI gameUI) {
         this.mapData = MapManager.loadRandomMap();
         this.zombies = new ArrayList<>();
         this.zombieMap = new HashMap<>();
         this.chests = new ArrayList<>();
+        this.gameUI = gameUI;
         iniatilizeEntities(playerPerception);
     }
 
@@ -57,7 +59,7 @@ public class GameManager {
         }
     }
 
-    public boolean isValidMove(int newX, int newY) {
+    private boolean isValidMove(int newX, int newY) {
         if (newX < 0 || newX >= mapData.length || newY < 0 || newY >= mapData.length) {
             return false;
         }
@@ -66,6 +68,16 @@ public class GameManager {
         }
 
         return true;
+    }
+
+    private void MovePlayer(int newX, int newY) {
+        if (isValidMove(newX, newY)) {
+            int[] oldPosition = player.getPosition();
+            mapData[oldPosition[0]][oldPosition[1]] = '.';
+            player.setPosition(newX, newY);
+            mapData[newX][newY] = 'P';
+            gameUI.UpdateUI();
+        }
     }
 
     public Hero getPlayer() {
