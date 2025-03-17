@@ -59,18 +59,17 @@ public class GameManager {
         }
     }
 
-    private boolean isValidMove(int newX, int newY) {
-        if (newX < 0 || newX >= mapData.length || newY < 0 || newY >= mapData.length) {
+    public boolean isValidMove(int newX, int newY) {
+        if (newX < 0 || newX >= mapData.length || newY < 0 || newY >= mapData[0].length) {
             return false;
         }
         if (mapData[newX][newY] == '#') {
             return false;
         }
-
         return true;
     }
 
-    private void MovePlayer(int newX, int newY) {
+    public void MovePlayer(int newX, int newY) {
         if (isValidMove(newX, newY)) {
             int[] oldPosition = player.getPosition();
             mapData[oldPosition[0]][oldPosition[1]] = '.';

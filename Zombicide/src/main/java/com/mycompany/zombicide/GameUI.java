@@ -67,6 +67,13 @@ public class GameUI {
                 break;
             case 'R': // Zumbi Rastejante
                 buttons[i][j].setIcon(CreateIcon("creeping.png"));
+                /*
+                if (debugMode) {
+                } else {
+                    // No modo normal, o zumbi rastejante pode não ser exibido
+                    buttons[i][j].setBackground(Color.WHITE);
+                }
+                 */
                 break;
             case 'Z': // Zumbi Comum
                 buttons[i][j].setIcon(CreateIcon("zombie.png"));
