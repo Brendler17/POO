@@ -69,13 +69,13 @@ public class GameManager {
         return true;
     }
 
-    public void MovePlayer(int newX, int newY) {
+    public void movePlayer(int newX, int newY) {
         if (isValidMove(newX, newY)) {
             int[] oldPosition = player.getPosition();
             mapData[oldPosition[0]][oldPosition[1]] = '.';
             player.setPosition(newX, newY);
             mapData[newX][newY] = 'P';
-            gameUI.UpdateUI();
+            gameUI.updateUI();
         }
     }
 

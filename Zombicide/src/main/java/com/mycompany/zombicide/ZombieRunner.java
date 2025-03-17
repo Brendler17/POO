@@ -6,6 +6,6 @@ public class ZombieRunner extends Zombie {
         super(2, positionX, positionY);
     }
 
-    public void Move(int newX, int newY) {
+    public void moveZombie(int newX, int newY) {
     }
 }

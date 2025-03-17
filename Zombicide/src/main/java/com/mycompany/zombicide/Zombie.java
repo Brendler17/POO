@@ -14,5 +14,5 @@ public abstract class Zombie {
         return position;
     }
 
-    public abstract void Move(int newX, int newY);
+    public abstract void moveZombie(int newX, int newY);
 }

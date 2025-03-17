@@ -54,6 +54,6 @@ public class WelcomeScreen {
         GameUI gameUI = new GameUI(debugMode);
         GameManager gameManager = new GameManager(playerPerception, gameUI);
         gameUI.setGameManager(gameManager);
-        gameUI.initialize();
+        gameUI.initializeUI();
     }
 }

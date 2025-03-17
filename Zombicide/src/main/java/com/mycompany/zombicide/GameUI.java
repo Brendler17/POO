@@ -22,7 +22,7 @@ public class GameUI {
         this.mapData = gameManager.getMapData();
     }
 
-    public void initialize() {
+    public void initializeUI() {
         frame = new JFrame("Zumbicídio");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 700);
@@ -36,7 +36,7 @@ public class GameUI {
             for (int j = 0; j < SIZE; j++) {
                 buttons[i][j] = new JButton();
                 buttons[i][j].setFont(new Font("Arial", Font.BOLD, 14));
-                AddIcon(i, j);
+                addIcon(i, j);
                 buttons[i][j].setDisabledIcon(buttons[i][j].getIcon());
                 buttons[i][j].setEnabled(false);
                 frame.add(buttons[i][j]);
@@ -46,11 +46,11 @@ public class GameUI {
         frame.setVisible(true);
     }
 
-    public void UpdateUI() {
+    public void updateUI() {
         mapData = gameManager.getMapData();
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                AddIcon(i, j);
+                addIcon(i, j);
             }
         }
 
@@ -58,15 +58,15 @@ public class GameUI {
         frame.repaint();
     }
 
-    private void AddIcon(int i, int j) {
+    private void addIcon(int i, int j) {
         char symbol = mapData[i][j];
 
         switch (symbol) {
             case 'P': // Jogador
-                buttons[i][j].setIcon(CreateIcon("heroWithNoGuns.png"));
+                buttons[i][j].setIcon(createIcon("heroWithNoGuns.png"));
                 break;
             case 'R': // Zumbi Rastejante
-                buttons[i][j].setIcon(CreateIcon("creeping.png"));
+                buttons[i][j].setIcon(createIcon("creeping.png"));
                 /*
                 if (debugMode) {
                 } else {
@@ -76,19 +76,19 @@ public class GameUI {
                  */
                 break;
             case 'Z': // Zumbi Comum
-                buttons[i][j].setIcon(CreateIcon("zombie.png"));
+                buttons[i][j].setIcon(createIcon("zombie.png"));
                 break;
             case 'C': // Zumbi Corredor
-                buttons[i][j].setIcon(CreateIcon("runner.png"));
+                buttons[i][j].setIcon(createIcon("runner.png"));
                 break;
             case 'G': // Zumbi Gigante
-                buttons[i][j].setIcon(CreateIcon("giant.png"));
+                buttons[i][j].setIcon(createIcon("giant.png"));
                 break;
             case 'B': // Baú
-                buttons[i][j].setIcon(CreateIcon("trunk.png"));
+                buttons[i][j].setIcon(createIcon("trunk.png"));
                 break;
             case '#': // Parede
-                buttons[i][j].setIcon(CreateIcon("wall.png"));
+                buttons[i][j].setIcon(createIcon("wall.png"));
                 break;
             default: // Espaço vazio
                 buttons[i][j].setBackground(Color.WHITE);
@@ -96,7 +96,7 @@ public class GameUI {
         }
     }
 
-    private ImageIcon CreateIcon(String filename) {
+    private ImageIcon createIcon(String filename) {
         int width = 50, height = 50;
 
         if (filename.equals("wall.png")) {

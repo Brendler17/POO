@@ -6,6 +6,6 @@ public class ZombieGiant extends Zombie {
         super(3, positionX, positionY);
     }
 
-    public void Move(int newX, int newY) {
+    public void moveZombie(int newX, int newY) {
     }
 }
