@@ -11,11 +11,18 @@ public class GameUI {
     private JFrame frame;
     private JButton[][] buttons;
     private char[][] mapData;
+    private boolean debugMode;
 
-    public GameUI(int playerPerception, boolean debugMode) {
-        gameManager = new GameManager(playerPerception);
+    public GameUI(boolean debugMode) {
+        this.debugMode = debugMode;
+    }
+
+    public void setGameManager(GameManager gameManager) {
+        this.gameManager = gameManager;
         this.mapData = gameManager.getMapData();
+    }
 
+    public void initialize() {
         frame = new JFrame("Zumbicídio");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 700);
@@ -37,6 +44,18 @@ public class GameUI {
         }
 
         frame.setVisible(true);
+    }
+
+    public void UpdateUI() {
+        mapData = gameManager.getMapData();
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                AddIcon(i, j);
+            }
+        }
+
+        frame.revalidate();
+        frame.repaint();
     }
 
     private void AddIcon(int i, int j) {
