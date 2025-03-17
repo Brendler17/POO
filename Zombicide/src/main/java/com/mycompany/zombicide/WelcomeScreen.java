@@ -51,6 +51,9 @@ public class WelcomeScreen {
     private void startGame(boolean debug) {
         debugMode = debug;
         frame.dispose();
-        new GameUI(playerPerception, debugMode);
+        GameUI gameUI = new GameUI(debugMode);
+        GameManager gameManager = new GameManager(playerPerception, gameUI);
+        gameUI.setGameManager(gameManager);
+        gameUI.initialize();
     }
 }
