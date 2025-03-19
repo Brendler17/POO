@@ -147,6 +147,15 @@ public class GameManager {
         return cell == 'Z' || cell == 'R' || cell == 'C' || cell == 'G';
     }
 
+    public void removeZombie(Zombie zombie) {
+        int[] position = zombie.getPosition();
+
+        mapData[position[0]][position[1]] = '.';
+        zombies.remove(zombie);
+
+        checkGameOver();
+    }
+
     public void checkGameOver() {
         if (player.getHealth() <= 0) {
             gameUI.gameOver(false);
