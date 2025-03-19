@@ -7,6 +7,7 @@ public class Hero {
     private int[] position;
     private String[] currentWeapon;
     private int ammo;
+    private int bandage;
 
     public Hero(int positionX, int positionY, int playerPerception) {
         this.health = 5;
@@ -66,6 +67,10 @@ public class Hero {
         if (ammo > 0) {
             ammo--;
         }
+    }
+
+    public void addBandage() {
+        bandage++;
     }
 
     public int attack() {
