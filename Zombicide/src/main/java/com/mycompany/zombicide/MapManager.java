@@ -7,14 +7,16 @@ public class MapManager {
 
     private static final String MAPS_FOLDER = "/maps/";
     private static final String[] MAPS_FILES = {"map_1.txt", "map_2.txt", "map_3.txt", "map_4.txt"};
+    private static String currentMapName;
 
     public static char[][] loadRandomMap() {
         Random random = new Random();
         String selectedMap = MAPS_FILES[random.nextInt(MAPS_FILES.length)];
+        currentMapName = selectedMap;
         return loadMap(selectedMap);
     }
 
-    private static char[][] loadMap(String mapName) {
+    public static char[][] loadMap(String mapName) {
         List<String> lines = new ArrayList<>();
 
         try (InputStream inputStream = MapManager.class.getResourceAsStream(MAPS_FOLDER + mapName); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -40,5 +42,9 @@ public class MapManager {
         }
 
         return mapMatrix;
+    }
+
+    public static String getCurrentMapName() {
+        return currentMapName;
     }
 }
