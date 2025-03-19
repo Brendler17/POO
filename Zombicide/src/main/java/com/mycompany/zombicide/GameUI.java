@@ -3,6 +3,8 @@ package com.mycompany.zombicide;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.*;
 
 public class GameUI {
@@ -220,6 +222,54 @@ public class GameUI {
         combatFrame.add(messagePanel, BorderLayout.SOUTH);
 
         combatFrame.setVisible(true);
+    }
+
+    public void openChest(int[] position) {
+        List<Chest> chests = gameManager.getChests();
+        for (Chest chest : chests) {
+            if (Arrays.equals(chest.getPosition(), position)) {
+                String content = chest.getContent();
+                switch (content) {
+                    case "bandage":
+                        JOptionPane.showMessageDialog(null, "Você encontrou uma atadura!");
+                        // icon
+                        player.addBandage();
+                        break;
+                    case "baseball_bat":
+                        JOptionPane.showMessageDialog(null, "Você encontrou um taco de beisebol!");
+                        // icon
+                        player.setCurrentWeapon("baseball_bat");
+                        break;
+                    case "revolver_zombie":
+                        JOptionPane.showMessageDialog(null, "Você encontrou uma arma, mas há um zumbi rastejante!");
+                        // icon
+                        if (player.hasGun()) {
+                            player.addAmmo();
+                        } else {
+                            player.setCurrentWeapon("gun");
+                            player.addAmmo();
+                        }
+
+                        int perceptionRoll = (int) (Math.random() * 3) + 1;
+                        if (perceptionRoll <= player.getPerception()) {
+                            JOptionPane.showMessageDialog(null, "Você conseguiu evitar o ataque do zumbi rastejante!");
+                        } else {
+                            player.takeDamage(1);
+                            JOptionPane.showMessageDialog(null, "O zumbi rastejante te atacou! Vida restante: " + player.getHealth());
+                            if (player.getHealth() <= 0) {
+                                // gameOver
+                            }
+                        }
+                        break;
+                }
+
+                mapData[position[0]][position[1]] = '.';
+                chests.remove(chest);
+                break;
+            }
+        }
+
+        updateUI();
     }
 
     private void addIcon(int i, int j) {
