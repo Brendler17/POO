@@ -149,7 +149,8 @@ public class GameUI {
 
                     if (player.getHealth() <= 0) {
                         combatFrame.dispose();
-                        // gameOver
+                        gameOver(false);
+
                     }
                 }
             }
@@ -177,7 +178,7 @@ public class GameUI {
 
                     if (player.getHealth() <= 0) {
                         combatFrame.dispose();
-                        // gameOver
+                        gameOver(false);
                     }
                 }
 
@@ -203,7 +204,7 @@ public class GameUI {
 
                     if (player.getHealth() <= 0) {
                         combatFrame.dispose();
-                        //gameOver
+                        gameOver(false);
                     }
                 }
             }
@@ -257,7 +258,7 @@ public class GameUI {
                             player.takeDamage(1);
                             JOptionPane.showMessageDialog(null, "O zumbi rastejante te atacou! Vida restante: " + player.getHealth());
                             if (player.getHealth() <= 0) {
-                                // gameOver
+                                gameOver(false);
                             }
                         }
                         break;
