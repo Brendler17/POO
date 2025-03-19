@@ -272,6 +272,41 @@ public class GameUI {
         updateUI();
     }
 
+    public void gameOver(boolean victory) {
+        String message = victory ? "Você venceu! Todos os zumbis foram derrotados!" : "Você perdeu! Sua vida chegou a zero.";
+
+        JFrame endFrame = new JFrame("Fim de Jogo");
+        endFrame.setSize(500, 200);
+        endFrame.setLayout(new GridLayout(3, 1));
+        endFrame.setLocationRelativeTo(null);
+
+        JLabel resultLabel = new JLabel(message, SwingConstants.CENTER);
+        resultLabel.setFont(new Font("Arial", Font.BOLD, 16));
+
+        JButton restartButton = new JButton("Reiniciar Jogo");
+        JButton newGameButton = new JButton("Novo Jogo");
+
+        restartButton.addActionListener(e -> {
+            restartGame();
+            endFrame.dispose();
+        });
+
+        newGameButton.addActionListener(e -> {
+            new WelcomeScreen();
+            endFrame.dispose();
+        });
+
+        endFrame.add(resultLabel);
+        endFrame.add(restartButton);
+        endFrame.add(newGameButton);
+        endFrame.setVisible(true);
+    }
+
+    public void restartGame() {
+        gameManager.restartGame();
+        frame.dispose();
+    }
+
     private void addIcon(int i, int j) {
         char symbol = mapData[i][j];
 

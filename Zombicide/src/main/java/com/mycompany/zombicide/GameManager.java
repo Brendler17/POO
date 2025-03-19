@@ -109,10 +109,12 @@ public class GameManager {
 
             player.setPosition(newX, newY);
             mapData[newX][newY] = 'P';
+
+            // moveZombies
             gameUI.updateUI();
             gameUI.createMovementButtons();
 
-            //gameOver
+            checkGameOver();
         }
     }
 
@@ -143,6 +145,26 @@ public class GameManager {
     private boolean hasZombie(int x, int y) {
         char cell = mapData[x][y];
         return cell == 'Z' || cell == 'R' || cell == 'C' || cell == 'G';
+    }
+
+    public void checkGameOver() {
+        if (player.getHealth() <= 0) {
+            gameUI.gameOver(false);
+            return;
+        }
+
+        if (zombies.isEmpty()) {
+            gameUI.gameOver(true);
+        }
+    }
+
+    public void restartGame() {
+        this.mapData = MapManager.loadMap(MapManager.getCurrentMapName());
+        this.zombies = new ArrayList<>();
+        this.zombieMap = new HashMap<>();
+        this.chests = new ArrayList<>();
+        iniatilizeEntities(player.getPerception());
+        gameUI.updateUI();
     }
 
     public Hero getPlayer() {
