@@ -92,11 +92,57 @@ public class GameManager {
         if (isValidMove(newX, newY)) {
             int[] oldPosition = player.getPosition();
             mapData[oldPosition[0]][oldPosition[1]] = '.';
+
+            for (Zombie zombie : zombies) {
+                if (Arrays.equals(zombie.getPosition(), new int[]{newX, newY})) {
+                    gameUI.initiateCombat(zombie);
+                    return;
+                }
+            }
+
+            for (Chest chest : chests) {
+                if (Arrays.equals(chest.getPosition(), new int[]{newX, newY})) {
+                    gameUI.openChest(new int[]{newX, newY});
+                    return;
+                }
+            }
+
             player.setPosition(newX, newY);
             mapData[newX][newY] = 'P';
             gameUI.updateUI();
             gameUI.createMovementButtons();
+
+            //gameOver
         }
+    }
+
+    public boolean tryToScape() {
+        int[] playerPosition = player.getPosition();
+        int x = playerPosition[0];
+        int y = playerPosition[1];
+
+        int[][] directions = {{x - 1, y}, {x + 1, y}, {x, y - 1}, {x, y + 1}};
+
+        for (int[] direction : directions) {
+            int newX = direction[0];
+            int newY = direction[1];
+
+            if (isValidMove(newX, newY) && !hasZombie(newX, newY)) {
+                player.setPosition(newX, newY);
+                mapData[x][y] = '.';
+                mapData[newX][newY] = 'P';
+                gameUI.updateUI();
+                gameUI.createMovementButtons();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean hasZombie(int x, int y) {
+        char cell = mapData[x][y];
+        return cell == 'Z' || cell == 'R' || cell == 'C' || cell == 'G';
     }
 
     public Hero getPlayer() {
