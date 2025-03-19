@@ -13,6 +13,7 @@ public class GameUI {
     private JButton[][] buttons;
     private char[][] mapData;
     private boolean debugMode;
+    private Hero player;
 
     public GameUI(boolean debugMode) {
         this.debugMode = debugMode;
@@ -21,6 +22,7 @@ public class GameUI {
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager;
         this.mapData = gameManager.getMapData();
+        this.player = gameManager.getPlayer();
     }
 
     public void initializeUI() {
@@ -97,6 +99,129 @@ public class GameUI {
         }
     }
 
+    public void initiateCombat(Zombie zombie) {
+        JFrame combatFrame = new JFrame("Combate");
+        combatFrame.setSize(600, 200);
+        combatFrame.setLayout(new BorderLayout());
+        combatFrame.setLocationRelativeTo(null);
+        combatFrame.setResizable(false);
+
+        JPanel statusPanel = new JPanel(new GridLayout(3, 1));
+        JLabel zombieTypeLabel = new JLabel("Tipo de Zumbi: " + zombie.getZombieType(zombie), SwingConstants.CENTER);
+        JLabel zombieHealthLabel = new JLabel("Vida do Zumbi: " + zombie.getHealth(), SwingConstants.CENTER);
+        JLabel playerHealthLabel = new JLabel("Sua vida: " + player.getHealth() + SwingConstants.CENTER);
+
+        statusPanel.add(zombieTypeLabel);
+        statusPanel.add(zombieHealthLabel);
+        statusPanel.add(playerHealthLabel);
+
+        JPanel actionPanel = new JPanel(new GridLayout(1, 3));
+        JButton firstAttackButton = new JButton(player.hasBaseballBat() ? "Atacar com Taco" : "Atacar com Mãos");
+        JButton secondAttackButton = new JButton("Atacar com Arma");
+        JButton fleeButton = new JButton("Fugir");
+
+        secondAttackButton.setEnabled(player.hasGun() && player.hasAmmo() && !(zombie instanceof ZombieRunner));
+        if (!(player.hasBaseballBat()) && !(player.hasGun()) && zombie instanceof ZombieGiant) {
+            firstAttackButton.setEnabled(false);
+        }
+
+        firstAttackButton.addActionListener(e -> {
+            int damage = player.attack();
+            zombie.takeDamage(damage);
+            zombieHealthLabel.setText("Vida do Zumbi: " + zombie.getHealth());
+
+            if (zombie.getHealth() <= 0) {
+                JOptionPane.showMessageDialog(combatFrame, "Você derrotou o zumbi!");
+                // remover zumbi
+                combatFrame.dispose();
+                updateUI();
+                createMovementButtons();
+            } else {
+                int perceptionRoll = (int) (Math.random() * 3) + 1;
+                if (perceptionRoll <= player.getPerception()) {
+                    JOptionPane.showMessageDialog(combatFrame, "Você conseguiu desviar do ataque!");
+                } else {
+                    player.takeDamage(zombie instanceof ZombieGiant ? 2 : 1);
+                    playerHealthLabel.setText("Sua vida: " + player.getHealth());
+                    JOptionPane.showMessageDialog(combatFrame, "O zumbi te atacou!");
+
+                    if (player.getHealth() <= 0) {
+                        combatFrame.dispose();
+                        // gameOver
+                    }
+                }
+            }
+        });
+
+        secondAttackButton.addActionListener(e -> {
+            player.useAmmo();
+            zombie.takeDamage(2);
+            zombieHealthLabel.setText("Vida do Zumbi: " + zombie.getHealth());
+
+            if (zombie.getHealth() <= 0) {
+                JOptionPane.showMessageDialog(combatFrame, "Você derrotou o zumbi!");
+                // remover zumbi
+                combatFrame.dispose();
+                updateUI();
+                createMovementButtons();
+            } else {
+                int perceptionRoll = (int) (Math.random() * 3) + 1;
+                if (perceptionRoll <= player.getPerception()) {
+                    JOptionPane.showMessageDialog(combatFrame, "Você conseguiu desviar do ataque!");
+                } else {
+                    player.takeDamage(zombie instanceof ZombieGiant ? 2 : 1);
+                    playerHealthLabel.setText("Sua vida: " + player.getHealth());
+                    JOptionPane.showMessageDialog(combatFrame, "O zumbi te atacou!");
+
+                    if (player.getHealth() <= 0) {
+                        combatFrame.dispose();
+                        // gameOver
+                    }
+                }
+
+            }
+
+        });
+
+        fleeButton.addActionListener(e -> {
+            boolean scaped = gameManager.tryToScape();
+            if (scaped) {
+                JOptionPane.showMessageDialog(combatFrame, "Você conseguiu fugir!");
+                combatFrame.dispose();
+            } else {
+                JOptionPane.showMessageDialog(combatFrame, "Não foi possível fugir!");
+
+                int perceptionRoll = (int) (Math.random() * 3) + 1;
+                if (perceptionRoll <= player.getPerception()) {
+                    JOptionPane.showMessageDialog(combatFrame, "Você conseguiu desviar do ataque!");
+                } else {
+                    player.takeDamage(zombie instanceof ZombieGiant ? 2 : 1);
+                    playerHealthLabel.setText("Sua Vida: " + player.getHealth());
+                    JOptionPane.showMessageDialog(combatFrame, "O zumbi te atacou!");
+
+                    if (player.getHealth() <= 0) {
+                        combatFrame.dispose();
+                        //gameOver
+                    }
+                }
+            }
+        });
+
+        actionPanel.add(firstAttackButton);
+        actionPanel.add(secondAttackButton);
+        actionPanel.add(fleeButton);
+
+        JPanel messagePanel = new JPanel();
+        JLabel messageLabel = new JLabel("Escolha sua ação!", SwingConstants.CENTER);
+        messagePanel.add(messageLabel);
+
+        combatFrame.add(statusPanel, BorderLayout.NORTH);
+        combatFrame.add(actionPanel, BorderLayout.CENTER);
+        combatFrame.add(messagePanel, BorderLayout.SOUTH);
+
+        combatFrame.setVisible(true);
+    }
+
     private void addIcon(int i, int j) {
         char symbol = mapData[i][j];
 
@@ -106,13 +231,6 @@ public class GameUI {
                 break;
             case 'R': // Zumbi Rastejante
                 buttons[i][j].setIcon(createIcon("creeping.png"));
-                /*
-                if (debugMode) {
-                } else {
-                    // No modo normal, o zumbi rastejante pode não ser exibido
-                    buttons[i][j].setBackground(Color.WHITE);
-                }
-                 */
                 break;
             case 'Z': // Zumbi Comum
                 buttons[i][j].setIcon(createIcon("zombie.png"));
