@@ -1,6 +1,8 @@
 package com.mycompany.zombicide;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ public class GameManager {
         this.chests = new ArrayList<>();
         this.gameUI = gameUI;
         iniatilizeEntities(playerPerception);
+        distributeChestContents();
     }
 
     private void iniatilizeEntities(int playerPerception) {
@@ -77,6 +80,22 @@ public class GameManager {
             mapData[newX][newY] = 'P';
             gameUI.updateUI();
             gameUI.createMovementButtons();
+        }
+    }
+
+    private void distributeChestContents() {
+        if (chests.size() != 4) {
+            System.err.println("Erro: O mapa deve conter exatamente 4 baús!");
+            return;
+        }
+
+        String[] contents = {"bandage", "baseball_bat", "revolver_zombie", "revolver_zombie"};
+
+        List<String> contentList = Arrays.asList(contents);
+        Collections.shuffle(contentList);
+
+        for (int i = 0; i < chests.size(); i++) {
+            chests.get(i).setContent(contentList.get(i));
         }
     }
 
