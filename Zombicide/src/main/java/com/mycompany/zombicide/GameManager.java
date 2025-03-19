@@ -110,7 +110,7 @@ public class GameManager {
             player.setPosition(newX, newY);
             mapData[newX][newY] = 'P';
 
-            // moveZombies
+            moveAllZombies();
             gameUI.updateUI();
             gameUI.createMovementButtons();
 
@@ -140,6 +140,64 @@ public class GameManager {
         }
 
         return false;
+    }
+
+    public void moveAllZombies() {
+        int[] playerPosition = player.getPosition();
+        List<Zombie> zombiesToRemove = new ArrayList<>();
+        List<int[]> newPositions = new ArrayList<>();
+
+        for (Zombie zombie : zombies) {
+            if (zombie instanceof ZombieGiant) {
+                continue;   // Gigante não se move
+            }
+
+            int[] oldPosition = zombie.getPosition();
+            mapData[oldPosition[0]][oldPosition[1]] = '.';
+
+            if (zombie instanceof ZombieRunner) {
+                // Corredor se move 2x
+                ((ZombieRunner) zombie).moveZombie(playerPosition, mapData);
+                ((ZombieRunner) zombie).moveZombie(playerPosition, mapData);
+            } else {
+                zombie.moveZombie(playerPosition, mapData);
+            }
+
+            int[] newPosition = zombie.getPosition();
+
+            // Zumbi encontrar jogador inicia combate
+            if (Arrays.equals(newPosition, playerPosition)) {
+                gameUI.initiateCombat(zombie);
+                return;
+            }
+
+            // Colisão com outros zumbis
+            for (int position[] : newPositions) {
+                if (Arrays.equals(newPosition, position)) {
+                    zombie.setPostion(oldPosition[0], oldPosition[1]);
+                    newPosition = oldPosition;
+                    break;
+                }
+            }
+
+            newPositions.add(newPosition);
+
+            // Atualiza posição no mapa
+            if (zombie instanceof ZombieCommon) {
+                mapData[newPosition[0]][newPosition[1]] = 'Z';
+            } else if (zombie instanceof ZombieCreeping) {
+                mapData[newPosition[0]][newPosition[1]] = 'R';
+            } else if (zombie instanceof ZombieRunner) {
+                mapData[newPosition[0]][newPosition[1]] = 'C';
+            }
+        }
+
+        for (Zombie zombie : zombiesToRemove) {
+            zombies.remove(zombie);
+        }
+
+        gameUI.updateUI();
+        checkGameOver();
     }
 
     private boolean hasZombie(int x, int y) {
