@@ -20,6 +20,7 @@ public class GameUI {
     private JLabel weaponLabel;
     private JLabel ammoLabel;
     private JLabel bandageLabel;
+    private JButton healButton;
     private Hero player;
 
     public GameUI(boolean debugMode) {
@@ -59,12 +60,12 @@ public class GameUI {
 
         // Painel de status
         JPanel statusPanel = new JPanel(new GridLayout(1, 5));
-        healthLabel = new JLabel("Saúde: " + gameManager.getPlayer().getHealth(), SwingConstants.CENTER);
-        perceptionLabel = new JLabel("Percepção: " + gameManager.getPlayer().getPerception(), SwingConstants.CENTER);
-        ammoLabel = new JLabel("Munição: " + gameManager.getPlayer().getAmmo(), SwingConstants.CENTER);
-        bandageLabel = new JLabel("Ataduras: " + gameManager.getPlayer().getBandage(), SwingConstants.CENTER);
+        healthLabel = new JLabel("Saúde: " + player.getHealth(), SwingConstants.CENTER);
+        perceptionLabel = new JLabel("Percepção: " + player.getPerception(), SwingConstants.CENTER);
+        ammoLabel = new JLabel("Munição: " + player.getAmmo(), SwingConstants.CENTER);
+        bandageLabel = new JLabel("Ataduras: " + player.getBandage(), SwingConstants.CENTER);
 
-        String[] weaponsName = gameManager.getPlayer().getWeaponName();
+        String[] weaponsName = player.getWeaponName();
         String weaponMessage = "Equipado: ";
 
         if ("Mãos".equals(weaponsName[0]) && weaponsName[1].isEmpty()) {
@@ -89,10 +90,10 @@ public class GameUI {
 
         // Painel de controle
         JPanel controlPanel = new JPanel();
-        JButton healButton = new JButton("Curar");
-        healButton.setEnabled(gameManager.getPlayer().hasBandage());
+        healButton = new JButton("Curar");
+        healButton.setEnabled(player.hasBandage());
         healButton.addActionListener(e -> {
-            gameManager.getPlayer().useBandage();
+            player.useBandage();
             JOptionPane.showMessageDialog(null, "Você usou uma atadura e recuperou 1 ponto de vida!");
             gameManager.moveAllZombies();
             updateUI();
@@ -146,6 +147,7 @@ public class GameUI {
 
         weaponLabel.setText(weaponMessage);
         ammoLabel.setText("Munição: " + player.getAmmo());
+        healButton.setEnabled(player.hasBandage() && player.getHealth() < 5);
         bandageLabel.setText("Ataduras: " + player.getBandage());
     }
 
@@ -160,7 +162,7 @@ public class GameUI {
             }
         }
 
-        int[] playerPosition = gameManager.getPlayer().getPosition();
+        int[] playerPosition = player.getPosition();
         int x = playerPosition[0];
         int y = playerPosition[1];
 
@@ -440,7 +442,7 @@ public class GameUI {
         if (isVisible || symbol == 'P') {
             switch (symbol) {
                 case 'P': // Jogador
-                    String[] weaponsName = gameManager.getPlayer().getWeaponName();
+                    String[] weaponsName = player.getWeaponName();
                     if ("Mãos".equals(weaponsName[0]) && weaponsName[1].isEmpty()) {
                         buttons[i][j].setIcon(createIcon("heroWithNoGuns.png"));
                     } else if ("Taco".equals(weaponsName[0]) && weaponsName[1].isEmpty()) {
