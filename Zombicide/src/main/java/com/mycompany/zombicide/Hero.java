@@ -53,7 +53,6 @@ public class Hero {
         if (weapon.equals("baseball_bat")) {
             currentWeapon[0] = weapon;
         } else if (weapon.equals("gun")) {
-            // Garantir que o array tem tamanho 2
             if (currentWeapon.length < 2) {
                 String[] newWeapons = new String[2];
                 newWeapons[0] = currentWeapon[0];
@@ -72,7 +71,6 @@ public class Hero {
     public String[] getWeaponName() {
         String[] weaponsName = new String[2];
 
-        // Processa arma corpo a corpo (posição 0)
         switch (currentWeapon[0]) {
             case "hands":
                 weaponsName[0] = "Mãos";
@@ -85,7 +83,6 @@ public class Hero {
                 break;
         }
 
-        // Verifica se há uma segunda arma antes de processar
         if (currentWeapon.length > 1) {
             switch (currentWeapon[1]) {
                 case "gun":
