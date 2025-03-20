@@ -427,7 +427,16 @@ public class GameUI {
         if (isVisible || symbol == 'P') {
             switch (symbol) {
                 case 'P': // Jogador
-                    buttons[i][j].setIcon(createIcon("heroWithNoGuns.png"));
+                    String[] weaponsName = gameManager.getPlayer().getWeaponName();
+                    if ("Mãos".equals(weaponsName[0]) && weaponsName[1].isEmpty()) {
+                        buttons[i][j].setIcon(createIcon("heroWithNoGuns.png"));
+                    } else if ("Taco".equals(weaponsName[0]) && weaponsName[1].isEmpty()) {
+                        buttons[i][j].setIcon(createIcon("heroWithBat.png"));
+                    } else if ("Mãos".equals(weaponsName[0]) && "Arma".equals(weaponsName[1])) {
+                        buttons[i][j].setIcon(createIcon("heroWithGun.png"));
+                    } else if ("Taco".equals(weaponsName[0]) && "Arma".equals(weaponsName[1])) {
+                        buttons[i][j].setIcon(createIcon("heroWithGun.png"));
+                    }
                     break;
                 case 'R': // Zumbi Rastejante
                     buttons[i][j].setIcon(createIcon("creeping.png"));
