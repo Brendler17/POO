@@ -140,16 +140,13 @@ public class Hero {
         }
     }
 
+    public int gunAttack() {
+        useAmmo();
+        return 2;
+    }
+
     public int attack() {
-        if (currentWeapon.length > 1 && "gun".equals(currentWeapon[1]) && ammo > 0) {
-            ammo--;
-            return 2;
-        } else if ("baseball_bat".equals(currentWeapon[0])) {
-            int diceRoll = (int) (Math.random() * 6) + 1;
-            return diceRoll == 6 ? 2 : 1;
-        } else {
-            int diceRoll = (int) (Math.random() * 6) + 1;
-            return diceRoll == 6 ? 2 : 1;
-        }
+        int diceRoll = (int) (Math.random() * 6) + 1;
+        return diceRoll == 6 ? 2 : 1;
     }
 }

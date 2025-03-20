@@ -253,8 +253,8 @@ public class GameUI {
         });
 
         secondAttackButton.addActionListener(e -> {
-            player.useAmmo();
-            zombie.takeDamage(2);
+            int damage = player.gunAttack();
+            zombie.takeDamage(damage);
             zombieHealthLabel.setText("Vida do Zumbi: " + zombie.getHealth());
 
             if (zombie.getHealth() <= 0) {
@@ -348,11 +348,12 @@ public class GameUI {
                         player.setCurrentWeapon("baseball_bat");
                         break;
                     case "revolver_zombie":
-                        JOptionPane.showMessageDialog(null, "Você encontrou uma arma, mas há um zumbi rastejante!");
                         // icon
                         if (player.hasGun()) {
+                            JOptionPane.showMessageDialog(null, "Você encontrou mais munição, mas há um zumbi rastejante!");
                             player.addAmmo();
                         } else {
+                            JOptionPane.showMessageDialog(null, "Você encontrou uma arma, mas há um zumbi rastejante!");
                             player.setCurrentWeapon("gun");
                             player.addAmmo();
                         }
