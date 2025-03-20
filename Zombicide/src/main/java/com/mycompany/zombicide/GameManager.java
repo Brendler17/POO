@@ -106,9 +106,9 @@ public class GameManager {
         if (x == playerX) {
             int start = Math.min(y, playerY);
             int end = Math.max(y, playerY);
-            for (int i = start + 1; i < end; i++) {
-                if (mapData[x][i] == '#' || mapData[x][i] == 'B') {
-                    return false;
+            for (int i = start + 1; i <= end; i++) {
+                if (mapData[x][i] == '#' || mapData[x][i] == 'B' || hasZombie(x, i)) {
+                    return i == y;
                 }
             }
 
@@ -118,9 +118,9 @@ public class GameManager {
         if (y == playerY) {
             int start = Math.min(x, playerX);
             int end = Math.max(x, playerX);
-            for (int i = start + 1; i < end; i++) {
-                if (mapData[i][y] == '#' || mapData[i][y] == 'B') {
-                    return false;
+            for (int i = start + 1; i <= end; i++) {
+                if (mapData[i][y] == '#' || mapData[i][y] == 'B' || hasZombie(i, y)) {
+                    return i == x;
                 }
             }
 
