@@ -403,6 +403,7 @@ public class GameUI {
         newGameButton.addActionListener(e -> {
             new WelcomeScreen();
             endFrame.dispose();
+            frame.dispose();
         });
 
         exitGameButton.addActionListener(e -> {
@@ -417,8 +418,13 @@ public class GameUI {
     }
 
     public void restartGame() {
-        gameManager.restartGame();
         frame.dispose();
+
+        String mapName = MapManager.getCurrentMapName();
+        GameUI newGame = new GameUI(this.debugMode);
+        GameManager newGameManager = new GameManager(player.getHealth(), newGame, mapName);
+        newGame.setGameManager(newGameManager);
+        newGame.initializeUI();
     }
 
     private void addIcon(int i, int j) {

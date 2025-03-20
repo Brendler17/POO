@@ -26,6 +26,16 @@ public class GameManager {
         distributeChestContents();
     }
 
+    public GameManager(int playerPerception, GameUI gameUI, String mapName) {
+        this.mapData = MapManager.loadMap(mapName);
+        this.zombies = new ArrayList<>();
+        this.zombieMap = new HashMap<>();
+        this.chests = new ArrayList<>();
+        this.gameUI = gameUI;
+        iniatilizeEntities(playerPerception);
+        distributeChestContents();
+    }
+
     private void iniatilizeEntities(int playerPerception) {
         Zombie newZombie;
         for (int i = 0; i < mapData.length; i++) {
@@ -277,15 +287,6 @@ public class GameManager {
         if (zombies.isEmpty()) {
             gameUI.gameOver(true);
         }
-    }
-
-    public void restartGame() {
-        this.mapData = MapManager.loadMap(MapManager.getCurrentMapName());
-        this.zombies = new ArrayList<>();
-        this.zombieMap = new HashMap<>();
-        this.chests = new ArrayList<>();
-        iniatilizeEntities(player.getPerception());
-        gameUI.updateUI();
     }
 
     public Hero getPlayer() {
