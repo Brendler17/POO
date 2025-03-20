@@ -88,6 +88,38 @@ public class GameManager {
         return true;
     }
 
+    public boolean isVisible(int x, int y) {
+        int[] playerPosition = player.getPosition();
+        int playerX = playerPosition[0];
+        int playerY = playerPosition[1];
+
+        if (x == playerX) {
+            int start = Math.min(y, playerY);
+            int end = Math.max(y, playerY);
+            for (int i = start + 1; i < end; i++) {
+                if (mapData[x][i] == '#' || mapData[x][i] == 'B') {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        if (y == playerY) {
+            int start = Math.min(x, playerX);
+            int end = Math.max(x, playerX);
+            for (int i = start + 1; i < end; i++) {
+                if (mapData[i][y] == '#' || mapData[i][y] == 'B') {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     public void movePlayer(int newX, int newY) {
         if (isValidMove(newX, newY)) {
             int[] oldPosition = player.getPosition();

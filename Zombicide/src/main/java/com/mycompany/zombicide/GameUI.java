@@ -391,32 +391,44 @@ public class GameUI {
 
     private void addIcon(int i, int j) {
         char symbol = mapData[i][j];
+        boolean isVisible = debugMode || gameManager.isVisible(i, j);
 
-        switch (symbol) {
-            case 'P': // Jogador
-                buttons[i][j].setIcon(createIcon("heroWithNoGuns.png"));
-                break;
-            case 'R': // Zumbi Rastejante
-                buttons[i][j].setIcon(createIcon("creeping.png"));
-                break;
-            case 'Z': // Zumbi Comum
-                buttons[i][j].setIcon(createIcon("zombie.png"));
-                break;
-            case 'C': // Zumbi Corredor
-                buttons[i][j].setIcon(createIcon("runner.png"));
-                break;
-            case 'G': // Zumbi Gigante
-                buttons[i][j].setIcon(createIcon("giant.png"));
-                break;
-            case 'B': // Baú
-                buttons[i][j].setIcon(createIcon("trunk.png"));
-                break;
-            case '#': // Parede
-                buttons[i][j].setIcon(createIcon("wall.png"));
-                break;
-            default: // Espaço vazio
-                buttons[i][j].setBackground(Color.WHITE);
-                break;
+        // Rastejante nunca é visível
+        if (symbol == 'R' && !debugMode) {
+            isVisible = false;
+        }
+
+        if (isVisible || symbol == 'P') {
+            switch (symbol) {
+                case 'P': // Jogador
+                    buttons[i][j].setIcon(createIcon("heroWithNoGuns.png"));
+                    break;
+                case 'R': // Zumbi Rastejante
+                    buttons[i][j].setIcon(createIcon("creeping.png"));
+                    break;
+                case 'Z': // Zumbi Comum
+                    buttons[i][j].setIcon(createIcon("zombie.png"));
+                    break;
+                case 'C': // Zumbi Corredor
+                    buttons[i][j].setIcon(createIcon("runner.png"));
+                    break;
+                case 'G': // Zumbi Gigante
+                    buttons[i][j].setIcon(createIcon("giant.png"));
+                    break;
+                case 'B': // Baú
+                    buttons[i][j].setIcon(createIcon("trunk.png"));
+                    break;
+                case '#': // Parede
+                    buttons[i][j].setIcon(createIcon("wall.png"));
+                    break;
+                default: // Espaço vazio
+                    buttons[i][j].setIcon(null);
+                    buttons[i][j].setBackground(Color.WHITE);
+                    break;
+            }
+        } else {
+            buttons[i][j].setIcon(null);
+            buttons[i][j].setBackground(Color.DARK_GRAY);
         }
     }
 
