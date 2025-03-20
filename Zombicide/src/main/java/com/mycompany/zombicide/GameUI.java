@@ -21,6 +21,7 @@ public class GameUI {
     private JLabel ammoLabel;
     private JLabel bandageLabel;
     private JButton healButton;
+    private JPanel boardPanel;
     private Hero player;
 
     public GameUI(boolean debugMode) {
@@ -42,7 +43,7 @@ public class GameUI {
         frame.setLocationRelativeTo(null);
 
         // Painel para o tabuleiro
-        JPanel boardPanel = new JPanel(new GridLayout(SIZE, SIZE));
+        boardPanel = new JPanel(new GridLayout(SIZE, SIZE));
         buttons = new JButton[SIZE][SIZE];
 
         for (int i = 0; i < SIZE; i++) {
@@ -190,7 +191,7 @@ public class GameUI {
         int[] playerInitialPosition = player.getPosition().clone();
         int[] zombieInitialPosition = zombie.getPosition().clone();
 
-        JFrame combatFrame = new JFrame("Combate");
+        JDialog combatFrame = new JDialog(frame, "Combate", true);
         combatFrame.setSize(600, 200);
         combatFrame.setLayout(new BorderLayout());
         combatFrame.setLocationRelativeTo(null);
