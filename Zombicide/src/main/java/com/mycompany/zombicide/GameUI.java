@@ -185,6 +185,9 @@ public class GameUI {
     }
 
     public void initiateCombat(Zombie zombie) {
+        int[] playerInitialPosition = player.getPosition().clone();
+        int[] zombieInitialPosition = zombie.getPosition().clone();
+
         JFrame combatFrame = new JFrame("Combate");
         combatFrame.setSize(600, 200);
         combatFrame.setLayout(new BorderLayout());
@@ -218,6 +221,17 @@ public class GameUI {
             if (zombie.getHealth() <= 0) {
                 JOptionPane.showMessageDialog(combatFrame, "Você derrotou o zumbi!");
                 gameManager.removeZombie(zombie);
+
+                // Verifica se o jogador atacou o zumbi
+                if (Arrays.equals(zombieInitialPosition, player.getPosition())) {
+                    // Jogador se move para a posição do zumbi
+                    player.setPosition(zombieInitialPosition[0], zombieInitialPosition[1]);
+                    mapData[zombieInitialPosition[0]][zombieInitialPosition[1]] = 'P';
+                } else {
+                    // Jogador permanece na posição que já estava
+                    mapData[playerInitialPosition[0]][playerInitialPosition[1]] = 'P';
+                }
+
                 combatFrame.dispose();
                 updateUI();
                 createMovementButtons();
@@ -246,6 +260,17 @@ public class GameUI {
             if (zombie.getHealth() <= 0) {
                 JOptionPane.showMessageDialog(combatFrame, "Você derrotou o zumbi!");
                 gameManager.removeZombie(zombie);
+
+                // Verifica se o jogador atacou o zumbi
+                if (Arrays.equals(zombieInitialPosition, player.getPosition())) {
+                    // Jogador se move para a posição do zumbi
+                    player.setPosition(zombieInitialPosition[0], zombieInitialPosition[1]);
+                    mapData[zombieInitialPosition[0]][zombieInitialPosition[1]] = 'P';
+                } else {
+                    // Jogador permanece na posição que já estava
+                    mapData[playerInitialPosition[0]][playerInitialPosition[1]] = 'P';
+                }
+
                 combatFrame.dispose();
                 updateUI();
                 createMovementButtons();
@@ -345,13 +370,14 @@ public class GameUI {
                         break;
                 }
 
-                mapData[position[0]][position[1]] = '.';
+                mapData[position[0]][position[1]] = 'P';
                 chests.remove(chest);
                 break;
             }
         }
 
         updateUI();
+        createMovementButtons();
     }
 
     public void gameOver(boolean victory) {

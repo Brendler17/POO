@@ -125,15 +125,23 @@ public class GameManager {
             int[] oldPosition = player.getPosition();
             mapData[oldPosition[0]][oldPosition[1]] = '.';
 
+            // Verifica se existe zumbi na posição de destino
             for (Zombie zombie : zombies) {
                 if (Arrays.equals(zombie.getPosition(), new int[]{newX, newY})) {
+                    // Mantem posição do jogador
+                    player.setPosition(oldPosition[0], oldPosition[1]);
+                    mapData[oldPosition[0]][oldPosition[1]] = 'P';
                     gameUI.initiateCombat(zombie);
                     return;
                 }
             }
 
+            // Verifica se existe baú na posição de destino
             for (Chest chest : chests) {
                 if (Arrays.equals(chest.getPosition(), new int[]{newX, newY})) {
+                    // Move jogador para posição do baú
+                    player.setPosition(newX, newY);
+                    mapData[newX][newY] = 'P';
                     gameUI.openChest(new int[]{newX, newY});
                     return;
                 }
@@ -199,6 +207,20 @@ public class GameManager {
 
             // Zumbi encontrar jogador inicia combate
             if (Arrays.equals(newPosition, playerPosition)) {
+                // Mantém posição do zumbi
+                zombie.setPostion(oldPosition[0], oldPosition[1]);
+
+                if (zombie instanceof ZombieCommon) {
+                    mapData[oldPosition[0]][oldPosition[1]] = 'Z';
+                } else if (zombie instanceof ZombieCreeping) {
+                    mapData[oldPosition[0]][oldPosition[1]] = 'R';
+                } else if (zombie instanceof ZombieRunner) {
+                    mapData[oldPosition[0]][oldPosition[1]] = 'C';
+                }
+
+                // Mantem icone do jogador na posição atual
+                mapData[playerPosition[0]][playerPosition[1]] = 'P';
+
                 gameUI.initiateCombat(zombie);
                 return;
             }
