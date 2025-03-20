@@ -385,7 +385,7 @@ public class GameUI {
 
         JFrame endFrame = new JFrame("Fim de Jogo");
         endFrame.setSize(500, 200);
-        endFrame.setLayout(new GridLayout(3, 1));
+        endFrame.setLayout(new GridLayout(4, 1));
         endFrame.setLocationRelativeTo(null);
 
         JLabel resultLabel = new JLabel(message, SwingConstants.CENTER);
@@ -393,6 +393,7 @@ public class GameUI {
 
         JButton restartButton = new JButton("Reiniciar Jogo");
         JButton newGameButton = new JButton("Novo Jogo");
+        JButton exitGameButton = new JButton("Sair do Jogo");
 
         restartButton.addActionListener(e -> {
             restartGame();
@@ -404,9 +405,14 @@ public class GameUI {
             endFrame.dispose();
         });
 
+        exitGameButton.addActionListener(e -> {
+            System.exit(0);
+        });
+
         endFrame.add(resultLabel);
         endFrame.add(restartButton);
         endFrame.add(newGameButton);
+        endFrame.add(exitGameButton);
         endFrame.setVisible(true);
     }
 
