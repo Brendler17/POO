@@ -15,6 +15,11 @@ public class GameUI {
     private JButton[][] buttons;
     private char[][] mapData;
     private boolean debugMode;
+    private JLabel healthLabel;
+    private JLabel perceptionLabel;
+    private JLabel weaponLabel;
+    private JLabel ammoLabel;
+    private JLabel bandageLabel;
     private Hero player;
 
     public GameUI(boolean debugMode) {
@@ -30,11 +35,13 @@ public class GameUI {
     public void initializeUI() {
         frame = new JFrame("Zumbicídio");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 700);
-        frame.setLayout(new GridLayout(SIZE, SIZE));
+        frame.setSize(900, 800);
+        frame.setLayout(new BorderLayout());
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
 
+        // Painel para o tabuleiro
+        JPanel boardPanel = new JPanel(new GridLayout(SIZE, SIZE));
         buttons = new JButton[SIZE][SIZE];
 
         for (int i = 0; i < SIZE; i++) {
@@ -44,9 +51,62 @@ public class GameUI {
                 addIcon(i, j);
                 buttons[i][j].setDisabledIcon(buttons[i][j].getIcon());
                 buttons[i][j].setEnabled(false);
-                frame.add(buttons[i][j]);
+                boardPanel.add(buttons[i][j]);
             }
         }
+
+        frame.add(boardPanel, BorderLayout.CENTER);
+
+        // Painel de status
+        JPanel statusPanel = new JPanel(new GridLayout(1, 5));
+        healthLabel = new JLabel("Saúde: " + gameManager.getPlayer().getHealth(), SwingConstants.CENTER);
+        perceptionLabel = new JLabel("Percepção: " + gameManager.getPlayer().getPerception(), SwingConstants.CENTER);
+        ammoLabel = new JLabel("Munição: " + gameManager.getPlayer().getAmmo(), SwingConstants.CENTER);
+        bandageLabel = new JLabel("Ataduras: " + gameManager.getPlayer().getBandage(), SwingConstants.CENTER);
+
+        String[] weaponsName = gameManager.getPlayer().getWeaponName();
+        String weaponMessage = "Equipado: ";
+
+        if ("Mãos".equals(weaponsName[0]) && weaponsName[1].isEmpty()) {
+            weaponMessage += "Mãos";
+        } else if ("Taco".equals(weaponsName[0]) && weaponsName[1].isEmpty()) {
+            weaponMessage += "Taco";
+        } else if ("Mãos".equals(weaponsName[0]) && "Arma".equals(weaponsName[1])) {
+            weaponMessage += "Arma";
+        } else if ("Taco".equals(weaponsName[0]) && "Arma".equals(weaponsName[1])) {
+            weaponMessage += "Taco e Arma";
+        }
+
+        weaponLabel = new JLabel(weaponMessage, SwingConstants.CENTER);
+
+        statusPanel.add(healthLabel);
+        statusPanel.add(perceptionLabel);
+        statusPanel.add(weaponLabel);
+        statusPanel.add(ammoLabel);
+        statusPanel.add(bandageLabel);
+
+        frame.add(statusPanel, BorderLayout.NORTH);
+
+        // Painel de controle
+        JPanel controlPanel = new JPanel();
+        JButton healButton = new JButton("Curar");
+        healButton.setEnabled(gameManager.getPlayer().hasBandage());
+        healButton.addActionListener(e -> {
+            gameManager.getPlayer().useBandage();
+            JOptionPane.showMessageDialog(null, "Você usou uma atadura e recuperou 1 ponto de vida!");
+            gameManager.moveAllZombies();
+            updateUI();
+            updateStatusPanel();
+            createMovementButtons();
+        });
+
+        JButton exitButton = new JButton("Sair");
+        exitButton.addActionListener(e -> gameOver(false));
+
+        controlPanel.add(healButton);
+        controlPanel.add(exitButton);
+
+        frame.add(controlPanel, BorderLayout.SOUTH);
 
         frame.setVisible(true);
         createMovementButtons();
@@ -63,8 +123,30 @@ public class GameUI {
             }
         }
 
+        updateStatusPanel();
         frame.revalidate();
         frame.repaint();
+    }
+
+    public void updateStatusPanel() {
+        healthLabel.setText("Saúde: " + player.getHealth());
+
+        String[] weaponsName = player.getWeaponName();
+        String weaponMessage = "Equipado: ";
+
+        if ("Mãos".equals(weaponsName[0]) && (weaponsName[1] == null || weaponsName[1].isEmpty())) {
+            weaponMessage += "Mãos";
+        } else if ("Taco".equals(weaponsName[0]) && (weaponsName[1] == null || weaponsName[1].isEmpty())) {
+            weaponMessage += "Taco";
+        } else if ("Mãos".equals(weaponsName[0]) && "Arma".equals(weaponsName[1])) {
+            weaponMessage += "Arma";
+        } else if ("Taco".equals(weaponsName[0]) && "Arma".equals(weaponsName[1])) {
+            weaponMessage += "Taco e Arma";
+        }
+
+        weaponLabel.setText(weaponMessage);
+        ammoLabel.setText("Munição: " + player.getAmmo());
+        bandageLabel.setText("Ataduras: " + player.getBandage());
     }
 
     public void createMovementButtons() {

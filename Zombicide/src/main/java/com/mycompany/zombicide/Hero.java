@@ -13,7 +13,9 @@ public class Hero {
         this.health = 5;
         this.perception = playerPerception;
         this.position = new int[]{positionX, positionY};
-        this.currentWeapon = new String[]{"hands"};
+        this.currentWeapon = new String[]{"hands", "none"};
+        this.ammo = 0;
+        this.bandage = 0;
     }
 
     public int getHealth() {
@@ -40,27 +42,76 @@ public class Hero {
     }
 
     public boolean hasBaseballBat() {
-        return currentWeapon[0].equals("baseball_bat");
+        return "baseball_bat".equals(currentWeapon[0]);
     }
 
     public boolean hasGun() {
-        if (currentWeapon.length > 1) {
-            return currentWeapon[1].equals("gun");
-        }
-
-        return false;
+        return currentWeapon.length > 1 && "gun".equals(currentWeapon[1]);
     }
 
     public void setCurrentWeapon(String weapon) {
         if (weapon.equals("baseball_bat")) {
             currentWeapon[0] = weapon;
-        } else {
-            currentWeapon[1] = weapon;
+        } else if (weapon.equals("gun")) {
+            // Garantir que o array tem tamanho 2
+            if (currentWeapon.length < 2) {
+                String[] newWeapons = new String[2];
+                newWeapons[0] = currentWeapon[0];
+                newWeapons[1] = weapon;
+                currentWeapon = newWeapons;
+            } else {
+                currentWeapon[1] = weapon;
+            }
         }
+    }
+
+    public String[] getCurrentWeapon() {
+        return currentWeapon;
+    }
+
+    public String[] getWeaponName() {
+        String[] weaponsName = new String[2];
+
+        // Processa arma corpo a corpo (posição 0)
+        switch (currentWeapon[0]) {
+            case "hands":
+                weaponsName[0] = "Mãos";
+                break;
+            case "baseball_bat":
+                weaponsName[0] = "Taco";
+                break;
+            default:
+                weaponsName[0] = "";
+                break;
+        }
+
+        // Verifica se há uma segunda arma antes de processar
+        if (currentWeapon.length > 1) {
+            switch (currentWeapon[1]) {
+                case "gun":
+                    weaponsName[1] = "Arma";
+                    break;
+                case "none":
+                    weaponsName[1] = "";
+                    break;
+                default:
+                    weaponsName[1] = "";
+                    break;
+            }
+        } else {
+            weaponsName[1] = "";
+        }
+
+        return weaponsName;
+
     }
 
     public boolean hasAmmo() {
         return ammo > 0;
+    }
+
+    public int getAmmo() {
+        return ammo;
     }
 
     public void addAmmo() {
@@ -73,8 +124,23 @@ public class Hero {
         }
     }
 
+    public boolean hasBandage() {
+        return bandage > 0;
+    }
+
+    public int getBandage() {
+        return bandage;
+    }
+
     public void addBandage() {
         bandage++;
+    }
+
+    public void useBandage() {
+        if (bandage > 0) {
+            bandage--;
+            health = Math.min(health + 1, 5);
+        }
     }
 
     public int attack() {
