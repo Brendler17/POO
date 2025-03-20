@@ -68,6 +68,7 @@ public class GameUI {
     }
 
     public void createMovementButtons() {
+        // Reseta os botões
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 buttons[i][j].setEnabled(false);
@@ -111,7 +112,7 @@ public class GameUI {
         JPanel statusPanel = new JPanel(new GridLayout(3, 1));
         JLabel zombieTypeLabel = new JLabel("Tipo de Zumbi: " + zombie.getZombieType(zombie), SwingConstants.CENTER);
         JLabel zombieHealthLabel = new JLabel("Vida do Zumbi: " + zombie.getHealth(), SwingConstants.CENTER);
-        JLabel playerHealthLabel = new JLabel("Sua vida: " + player.getHealth() + SwingConstants.CENTER);
+        JLabel playerHealthLabel = new JLabel("Sua vida: " + player.getHealth(), SwingConstants.CENTER);
 
         statusPanel.add(zombieTypeLabel);
         statusPanel.add(zombieHealthLabel);

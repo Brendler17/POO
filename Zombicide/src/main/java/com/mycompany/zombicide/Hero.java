@@ -44,7 +44,11 @@ public class Hero {
     }
 
     public boolean hasGun() {
-        return currentWeapon[1].equals("gun");
+        if (currentWeapon.length > 1) {
+            return currentWeapon[1].equals("gun");
+        }
+
+        return false;
     }
 
     public void setCurrentWeapon(String weapon) {
@@ -74,7 +78,7 @@ public class Hero {
     }
 
     public int attack() {
-        if ("gun".equals(currentWeapon[1]) && ammo > 0) {
+        if (currentWeapon.length > 1 && "gun".equals(currentWeapon[1]) && ammo > 0) {
             ammo--;
             return 2;
         } else if ("baseball_bat".equals(currentWeapon[0])) {
