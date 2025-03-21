@@ -336,24 +336,26 @@ public class GameUI {
         for (Chest chest : chests) {
             if (Arrays.equals(chest.getPosition(), position)) {
                 String content = chest.getContent();
+                ImageIcon icon;
                 switch (content) {
                     case "bandage":
-                        JOptionPane.showMessageDialog(null, "Você encontrou uma atadura!");
-                        // icon
+                        icon = createIcon("medKit.png");
+                        showMessageWithIcon("Você encontrou uma atadura!", icon);
                         player.addBandage();
                         break;
                     case "baseball_bat":
-                        JOptionPane.showMessageDialog(null, "Você encontrou um taco de beisebol!");
-                        // icon
+                        icon = createIcon("bat.png");
+                        showMessageWithIcon("Você encontrou um taco de beisebol!", icon);
                         player.setCurrentWeapon("baseball_bat");
                         break;
                     case "revolver_zombie":
-                        // icon
                         if (player.hasGun()) {
-                            JOptionPane.showMessageDialog(null, "Você encontrou mais munição, mas há um zumbi rastejante!");
+                            icon = createIcon("ammo.png");
+                            showMessageWithIcon("Você encontrou mais munição, mas há um zumbi rastejante!", icon);
                             player.addAmmo();
                         } else {
-                            JOptionPane.showMessageDialog(null, "Você encontrou uma arma, mas há um zumbi rastejante!");
+                            icon = createIcon("gun.png");
+                            showMessageWithIcon("Você encontrou uma arma, mas há um zumbi rastejante!", icon);
                             player.setCurrentWeapon("gun");
                             player.addAmmo();
                         }
@@ -379,6 +381,26 @@ public class GameUI {
 
         updateUI();
         createMovementButtons();
+    }
+
+    private void showMessageWithIcon(String message, ImageIcon icon) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        JLabel iconLabel = new JLabel(icon);
+        iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel messageLabel = new JLabel("<html><div style='text-align: center;'>" + message + "</div></html>");
+        messageLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        panel.add(iconLabel);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(messageLabel);
+
+        JOptionPane.showOptionDialog(null, panel, "Baú Encontrado",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, new Object[]{"OK"}, "OK");
     }
 
     public void gameOver(boolean victory) {
@@ -464,7 +486,7 @@ public class GameUI {
                     buttons[i][j].setIcon(createIcon("giant.png"));
                     break;
                 case 'B': // Baú
-                    buttons[i][j].setIcon(createIcon("trunk.png"));
+                    buttons[i][j].setIcon(createIcon("chest.png"));
                     break;
                 case '#': // Parede
                     buttons[i][j].setIcon(createIcon("wall.png"));
