@@ -20,8 +20,10 @@ public class GameUI {
     private JLabel weaponLabel;
     private JLabel ammoLabel;
     private JLabel bandageLabel;
+    private JLabel playerHealthLabel;
     private JButton healButton;
     private JPanel boardPanel;
+    private JDialog combatFrame;
     private Hero player;
 
     public GameUI(boolean debugMode) {
@@ -191,7 +193,7 @@ public class GameUI {
         int[] playerInitialPosition = player.getPosition().clone();
         int[] zombieInitialPosition = zombie.getPosition().clone();
 
-        JDialog combatFrame = new JDialog(frame, "Combate", true);
+        combatFrame = new JDialog(frame, "Combate", true);
         combatFrame.setSize(600, 200);
         combatFrame.setLayout(new BorderLayout());
         combatFrame.setLocationRelativeTo(null);
@@ -200,7 +202,7 @@ public class GameUI {
         JPanel statusPanel = new JPanel(new GridLayout(3, 1));
         JLabel zombieTypeLabel = new JLabel("Tipo de Zumbi: " + zombie.getZombieType(zombie), SwingConstants.CENTER);
         JLabel zombieHealthLabel = new JLabel("Vida do Zumbi: " + zombie.getHealth(), SwingConstants.CENTER);
-        JLabel playerHealthLabel = new JLabel("Sua vida: " + player.getHealth(), SwingConstants.CENTER);
+        playerHealthLabel = new JLabel("Sua vida: " + player.getHealth(), SwingConstants.CENTER);
 
         statusPanel.add(zombieTypeLabel);
         statusPanel.add(zombieHealthLabel);
@@ -239,19 +241,7 @@ public class GameUI {
                 updateUI();
                 createMovementButtons();
             } else {
-                int perceptionRoll = (int) (Math.random() * 3) + 1;
-                if (perceptionRoll <= player.getPerception()) {
-                    JOptionPane.showMessageDialog(combatFrame, "Você conseguiu desviar do ataque!");
-                } else {
-                    player.takeDamage(zombie instanceof ZombieGiant ? 2 : 1);
-                    playerHealthLabel.setText("Sua vida: " + player.getHealth());
-                    JOptionPane.showMessageDialog(combatFrame, "O zumbi te atacou!");
-
-                    if (player.getHealth() <= 0) {
-                        combatFrame.dispose();
-                        gameOver(false);
-                    }
-                }
+                zombieAttack(zombie, false);
             }
         });
 
@@ -278,19 +268,7 @@ public class GameUI {
                 updateUI();
                 createMovementButtons();
             } else {
-                int perceptionRoll = (int) (Math.random() * 3) + 1;
-                if (perceptionRoll <= player.getPerception()) {
-                    JOptionPane.showMessageDialog(combatFrame, "Você conseguiu desviar do ataque!");
-                } else {
-                    player.takeDamage(zombie instanceof ZombieGiant ? 2 : 1);
-                    playerHealthLabel.setText("Sua vida: " + player.getHealth());
-                    JOptionPane.showMessageDialog(combatFrame, "O zumbi te atacou!");
-
-                    if (player.getHealth() <= 0) {
-                        combatFrame.dispose();
-                        gameOver(false);
-                    }
-                }
+                zombieAttack(zombie, false);
             }
 
         });
@@ -303,19 +281,7 @@ public class GameUI {
             } else {
                 JOptionPane.showMessageDialog(combatFrame, "Não foi possível fugir!");
 
-                int perceptionRoll = (int) (Math.random() * 3) + 1;
-                if (perceptionRoll <= player.getPerception()) {
-                    JOptionPane.showMessageDialog(combatFrame, "Você conseguiu desviar do ataque!");
-                } else {
-                    player.takeDamage(zombie instanceof ZombieGiant ? 2 : 1);
-                    playerHealthLabel.setText("Sua Vida: " + player.getHealth());
-                    JOptionPane.showMessageDialog(combatFrame, "O zumbi te atacou!");
-
-                    if (player.getHealth() <= 0) {
-                        combatFrame.dispose();
-                        gameOver(false);
-                    }
-                }
+                zombieAttack(zombie, false);
             }
         });
 
@@ -332,6 +298,37 @@ public class GameUI {
         combatFrame.add(messagePanel, BorderLayout.SOUTH);
 
         combatFrame.setVisible(true);
+    }
+
+    public void zombieAttack(Zombie zombie, boolean zombieAttackFirst) {
+        int perceptionRoll = (int) (Math.random() * 3) + 1;
+        if (perceptionRoll <= player.getPerception()) {
+            if (zombieAttackFirst) {
+                JOptionPane.showMessageDialog(combatFrame, "Um " + zombie.getZombieType(zombie) + " tentou te atacar primeiro!");
+            } else {
+                JOptionPane.showMessageDialog(combatFrame, "Você conseguiu desviar do ataque!");
+            }
+        } else {
+            if (zombieAttackFirst) {
+                JOptionPane.showMessageDialog(combatFrame, "Um " + zombie.getZombieType(zombie) + " te atacou primeiro!");
+            } else {
+                JOptionPane.showMessageDialog(combatFrame, "O zumbi te atacou!");
+            }
+
+            player.takeDamage(zombie instanceof ZombieGiant ? 2 : 1);
+
+            if (combatFrame != null && playerHealthLabel != null) {
+                playerHealthLabel.setText("Sua vida: " + player.getHealth());
+            }
+
+            updateUI();
+
+            if (player.getHealth() <= 0 && !zombieAttackFirst) {
+                combatFrame.dispose();
+                gameOver(false);
+                return;
+            }
+        }
     }
 
     public void openChest(int[] position) {

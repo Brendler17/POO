@@ -231,7 +231,14 @@ public class GameManager {
                 // Mantem icone do jogador na posição atual
                 mapData[playerPosition[0]][playerPosition[1]] = 'P';
 
-                gameUI.initiateCombat(zombie);
+                // Zumbi ataca primeiro
+                gameUI.updateUI();
+                gameUI.zombieAttack(zombie, true);
+
+                if (player.getHealth() > 0) {
+                    gameUI.initiateCombat(zombie);
+                }
+
                 return;
             }
 
@@ -261,7 +268,6 @@ public class GameManager {
         }
 
         gameUI.updateUI();
-        checkGameOver();
     }
 
     private boolean hasZombie(int x, int y) {
