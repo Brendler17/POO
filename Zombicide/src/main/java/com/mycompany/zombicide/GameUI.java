@@ -406,9 +406,13 @@ public class GameUI {
     public void gameOver(boolean victory) {
         String message = victory ? "Você venceu! Todos os zumbis foram derrotados!" : "Você perdeu! Sua vida chegou a zero.";
 
+        ImageIcon icon = createIcon(victory ? "winner.png" : "loser.png");
+        JLabel iconLabel = new JLabel(icon);
+        iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
         JFrame endFrame = new JFrame("Fim de Jogo");
-        endFrame.setSize(500, 200);
-        endFrame.setLayout(new GridLayout(4, 1));
+        endFrame.setSize(500, 300);
+        endFrame.setLayout(new GridLayout(5, 1));
         endFrame.setLocationRelativeTo(null);
 
         JLabel resultLabel = new JLabel(message, SwingConstants.CENTER);
@@ -433,6 +437,7 @@ public class GameUI {
             System.exit(0);
         });
 
+        endFrame.add(iconLabel);
         endFrame.add(resultLabel);
         endFrame.add(restartButton);
         endFrame.add(newGameButton);
