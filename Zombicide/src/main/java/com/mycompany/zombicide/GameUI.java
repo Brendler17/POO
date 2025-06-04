@@ -39,7 +39,7 @@ public class GameUI {
     public void initializeUI() {
         frame = new JFrame("Zumbicídio");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(900, 800);
+        frame.setSize(700, 600);
         frame.setLayout(new BorderLayout());
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
